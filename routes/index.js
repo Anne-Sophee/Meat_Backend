@@ -21,6 +21,7 @@ router.post('/login', async function(req, res, next) {
   //recherche du document correspondant à l'email reçu du frontend
   var user = await UserModel.findOne({email});
   console.log(user)
+
   if (user) {
 
   //comparaison des mdp crytés pour permettre le login
@@ -34,7 +35,6 @@ router.post('/login', async function(req, res, next) {
   } else {
     return error
   }
-  res.json(error, user)
 })
 
 

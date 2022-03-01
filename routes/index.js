@@ -32,7 +32,7 @@ router.post('/login', async function(req, res, next) {
     }
 
   } else {
-    res.json({ errorUser })
+    res.json({ errorUser, errorPassword })
   }
 })
 

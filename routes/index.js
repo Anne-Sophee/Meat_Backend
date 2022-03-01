@@ -16,12 +16,13 @@ router.post('/login', async function(req, res, next) {
   console.log(req.body)
 
   //variable de vérification de l'existence d'un user
-  var result = false
-  var error = "Pas d'erreurs!"
+  var error = "Utilisateur inexistant!"
 
   //recherche du document correspondant à l'email reçu du frontend
   var user = await UserModel.findOne({email});
   console.log(user)
+  if (user) {
+
   //comparaison des mdp crytés pour permettre le login
     if (bcrypt.compareSync(password, user.password)) {
       console.log("password ok")
@@ -29,6 +30,11 @@ router.post('/login', async function(req, res, next) {
     } else {
       res.json({ login: false });
     }
+
+  } else {
+    return error
+  }
+  res.json(error, user)
 })
 
 

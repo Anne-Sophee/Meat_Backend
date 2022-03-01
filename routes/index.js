@@ -16,7 +16,8 @@ router.post('/login', async function(req, res, next) {
   console.log("req.body", req.body)
 
   //variable de vérification de l'existence d'un user
-  var error = "Utilisateur inexistant!"
+  var errorUser = "Utilisateur inexistant!"
+  var errorPassword = "Mot de passe erroné!"
 
   //recherche du document correspondant à l'email reçu du frontend
   var user = await UserModel.findOne({email});
@@ -27,11 +28,11 @@ router.post('/login', async function(req, res, next) {
     if (bcrypt.compareSync(password, user.password)) {
       res.json({ login: true, user });
     } else {
-      res.json({ login: false });
+      res.json({ login: false, errorPassword });
     }
 
   } else {
-    res.json({ error })
+    res.json({ errorUser })
   }
 })
 

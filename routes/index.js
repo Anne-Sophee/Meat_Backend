@@ -17,6 +17,7 @@ router.post('/login', async function(req, res, next) {
 
   //variable de vérification de l'existence d'un user
   var error = "Utilisateur inexistant!"
+  var errorPassword = "Mot de passe erroné!"
 
   //recherche du document correspondant à l'email reçu du frontend
   var user = await UserModel.findOne({email});
@@ -27,7 +28,7 @@ router.post('/login', async function(req, res, next) {
       console.log("password ok")
       res.json({ login: true, user });
     } else {
-      res.json({ login: false });
+      res.json({ login: false, errorPassword });
     }
 
   } else {

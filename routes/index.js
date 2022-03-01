@@ -23,7 +23,6 @@ router.post('/login', async function(req, res, next) {
   console.log(user)
 
   if (user) {
-
   //comparaison des mdp crytés pour permettre le login
     if (bcrypt.compareSync(password, user.password)) {
       console.log("password ok")
@@ -33,7 +32,7 @@ router.post('/login', async function(req, res, next) {
     }
 
   } else {
-    return error
+    res.json({ error })
   }
 })
 

@@ -25,7 +25,6 @@ router.post('/login', async function(req, res, next) {
   if (user) {
   //comparaison des mdp crytés pour permettre le login
     if (bcrypt.compareSync(password, user.password)) {
-      console.log("password ok")
       res.json({ login: true, user });
     } else {
       res.json({ login: false });

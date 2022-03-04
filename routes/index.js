@@ -22,17 +22,12 @@ router.post('/login', async function(req, res, next) {
   //recherche du document correspondant à l'email reçu du frontend
   var user = await UserModel.findOne({email});
 
-  if (user) {
   //comparaison des mdp crytés pour permettre le login
     if (bcrypt.compareSync(password, user.password)) {
       res.json({ login: true, user });
     } else {
       res.json({ login: false, errorPassword });
     }
-
-  } else {
-    res.json({ error, user })
-  }
 })
 
 

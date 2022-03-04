@@ -25,7 +25,6 @@ router.post('/login', async function(req, res, next) {
   if (user) {
   //comparaison des mdp crytés pour permettre le login
     if (bcrypt.compareSync(password, user.password)) {
-      console.log("password ok")
       res.json({ login: true, user });
     } else {
       res.json({ login: false, errorPassword });
@@ -42,7 +41,7 @@ router.post('/register', async function(req, res, next) {
 
   var error = "Nouvel utilisateur!"
   const cost = 10; //nombre de tours de hashage à effectuer
-  const hash = bcrypt.hashSync(myPlaintextPassword, cost); //génère le hash du mdp
+  const hash = bcrypt.hashSync(req.body.password, cost); //génère le hash du mdp
 
   var user = await UserModel.findOne({email: req.body.email});
   if (user) {
@@ -55,7 +54,7 @@ router.post('/register', async function(req, res, next) {
           firstname: req.body.firstname,
           email: req.body.email,
           password: hash,
-          userAddress: req.body.adresse,
+          userAddress: req.body.address,
           userPhoneNumber: req.body.phoneNumber,
           dateOfBirth: req.body.dateOfBirth,
           gender: req.body.value,
@@ -67,7 +66,7 @@ router.post('/register', async function(req, res, next) {
         console.log(userSaved)
       }
 
-  res.json({error, userSaved, user})
+  res.json({result: userSaved ? true : false, error})
 });
 
 module.exports = router;

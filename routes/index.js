@@ -13,7 +13,6 @@ router.post('/login', async function(req, res, next) {
 
   var email = req.body.email
   var password = req.body.password
-  console.log("req.body", req.body)
 
   //variable de vérification de l'existence d'un user
   var error = "Utilisateur inexistant!"

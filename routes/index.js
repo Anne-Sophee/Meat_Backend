@@ -6,6 +6,15 @@ var router = express.Router();
 var bcrypt = require('bcrypt');
 var uid2 = require('uid2');
 
+var fs = require('fs');
+var uniqid = require('uniqid');
+var cloudinary = require('cloudinary').v2;
+cloudinary.config({
+ cloud_name: 'dsnrvfoqx',
+ api_key: '169999271669978',
+ api_secret: 'd3R9CygGoYRnHQz2ViW7OFTc_jo' 
+});
+
 
 
 /* PAGE DE CONNEXION */
@@ -67,5 +76,23 @@ router.post('/register', async function(req, res, next) {
 
   res.json({result: userSaved ? true : false, error})
 });
+
+
+/* SAUVEGARDE DE FICHIER SUR CLOUDINARY */
+router.post('/upload', async function(req, res, next) {
+
+  var picturePath = '/tmp/'+uniqid()+'jpg';
+  var resultCloudinary = await cloudinary.uploader.upload(picturePath);
+  fs.unlinkSync(picturePath)
+  res.json(resultCloudinary);
+});
+
+
+
+
+
+
+
+
 
 module.exports = router;

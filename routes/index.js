@@ -55,7 +55,7 @@ router.post('/register', async function(req, res, next) {
           password: hash,
           userAddress: req.body.address,
           userPhoneNumber: req.body.phoneNumber,
-          dateOfBirth: req.body.dateOfBirth,
+          dateOfBirth: new Date (req.body.dateOfBirth),
           gender: req.body.gender,
           token: uid2(32)
         });

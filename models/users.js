@@ -9,7 +9,7 @@ var UserSchema = mongoose.Schema({
     userAddress : String,
     userPhoneNumber : Number,
     DateOfBirth : Date,
-    Gender : String
+    Gender : Boolean
 });
 
 //méthode model avec en premier argument le nom de la collection et en deuxième le schéma 

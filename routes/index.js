@@ -58,9 +58,11 @@ router.post('/register', async function(req, res, next) {
           userAddress: req.body.address,
           userPhoneNumber: req.body.phoneNumber,
           dateOfBirth: req.body.dateOfBirth,
-          gender: req.body.value,
+          gender: req.body.gender,
           token: uid2(32)
         });
+
+        console.log('dob1:', req.body.dateOfBirth, 'gender:', req.body.gender)
 
         //enregistrement du nouvel utilisateur dans la bdd
         var userSaved = await newUser.save();

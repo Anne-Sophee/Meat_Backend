@@ -39,7 +39,6 @@ router.post('/login', async function(req, res, next) {
 /* PAGE DE CREATION DE COMPTE */
 router.post('/register', async function(req, res, next) {
 
-  console.log('user:', req.body)
   var error = "Nouvel utilisateur!"
   const cost = 10; //nombre de tours de hashage à effectuer
   const hash = bcrypt.hashSync(req.body.password, cost); //génère le hash du mdp
@@ -57,12 +56,10 @@ router.post('/register', async function(req, res, next) {
           password: hash,
           userAddress: req.body.address,
           userPhoneNumber: req.body.phoneNumber,
-          dateOfBirth: new Date(req.body.dateOfBirth),
+          dateOfBirth: req.body.dateOfBirth,
           gender: req.body.gender,
           token: uid2(32)
         });
-
-        console.log('dob1:', req.body.dateOfBirth, 'gender:', req.body.gender)
 
         //enregistrement du nouvel utilisateur dans la bdd
         var userSaved = await newUser.save();

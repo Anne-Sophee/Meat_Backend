@@ -39,6 +39,7 @@ router.post('/login', async function(req, res, next) {
 /* PAGE DE CREATION DE COMPTE */
 router.post('/register', async function(req, res, next) {
 
+  console.log('user:', req.body)
   var error = "Nouvel utilisateur!"
   const cost = 10; //nombre de tours de hashage à effectuer
   const hash = bcrypt.hashSync(req.body.password, cost); //génère le hash du mdp

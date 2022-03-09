@@ -84,7 +84,7 @@ router.post('/register', async function(req, res, next) {
 router.post('/uploadAvatar', async function(req, res, next) {
 
   // dossier dans lequel on veut placer notre fichier
-  var picturePath = './tmp/'+uniqid()+'jpg';
+  var picturePath = './tmp/'+uniqid()+'.jpg';
 
   // enregistrement/déplacement du fichier 'avatar' dans notre dossier temporaire 
   var resultCopy = await req.files.avatar.mv(picturePath);

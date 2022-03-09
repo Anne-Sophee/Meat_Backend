@@ -97,7 +97,6 @@ router.post('/uploadAvatar', async function(req, res, next) {
       res.json({error: resultCopy, message: 'Erreur de téléchargement!'})
     }
   
-  
 });
 
 

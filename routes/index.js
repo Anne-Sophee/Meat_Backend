@@ -58,6 +58,7 @@ router.post('/register', async function(req, res, next) {
 
         //création d'un nouvel utilisateur
         var newUser = new UserModel ({
+          avatar: req.body.avatar,
           lastname: req.body.lastname,
           firstname: req.body.firstname,
           email: req.body.email,
@@ -67,6 +68,7 @@ router.post('/register', async function(req, res, next) {
           dateOfBirth: req.body.dateOfBirth,
           gender: req.body.gender,
           token: uid2(32)
+          
         });
 
         //enregistrement du nouvel utilisateur dans la bdd
@@ -79,12 +81,24 @@ router.post('/register', async function(req, res, next) {
 
 
 /* SAUVEGARDE DE FICHIER SUR CLOUDINARY */
-router.post('/upload', async function(req, res, next) {
+router.post('/uploadAvatar', async function(req, res, next) {
 
-  var picturePath = '/tmp/'+uniqid()+'jpg';
-  var resultCloudinary = await cloudinary.uploader.upload(picturePath);
+  // dossier dans lequel on veut placer notre fichier
+  var picturePath = './tmp/'+uniqid()+'jpg';
+
+  // enregistrement/déplacement du fichier 'avatar' dans notre dossier temporaire 
+  var resultCopy = await req.files.avatar.mv(picturePath);
+
+    if (!resultCopy) {
+      var resultCloudinary = await cloudinary.uploader.upload(picturePath);
+      console.log(resultCloudinary)
+      res.json({cloud: resultCloudinary, message: 'Fichier téléchargé!'});
+    } else {
+      res.json({error: resultCopy, message: 'Erreur de téléchargement!'})
+    }
+  
   fs.unlinkSync(picturePath)
-  res.json(resultCloudinary);
+  
 });
 
 

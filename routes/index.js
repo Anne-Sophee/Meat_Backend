@@ -22,13 +22,16 @@ router.post('/login', async function(req, res, next) {
 
   var email = req.body.email
   var password = req.body.password
+  console.log('email:', email, 'mdp:', password)
 
   //variable de vérification de l'existence d'un user
   var error = "Utilisateur inexistant!"
   var errorPassword = "Mot de passe erroné!"
+  console.log('erreur user:', error, 'erreur mdp:', errorPassword)
 
   //recherche du document correspondant à l'email reçu du frontend
   var user = await UserModel.findOne({email});
+  console.log('user trouvé:', user)
 
   if (user) {
   //comparaison des mdp crytés pour permettre le login

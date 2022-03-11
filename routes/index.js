@@ -31,18 +31,20 @@ router.post('/login', async function(req, res, next) {
 
   //recherche du document correspondant à l'email reçu du frontend
   var user = await UserModel.findOne({email});
-  console.log('user trouvé:', user)
 
   if (user) {
   //comparaison des mdp crytés pour permettre le login
     if (bcrypt.compareSync(password, user.password)) {
       res.json({ login: true, user });
+      console.log('user trouvé:', user)
     } else {
       res.json({ signin: false, errorPassword });
+      console.log('mdp error:', errorPassword)
     }
 
   } else {
     res.json({ error, user })
+    console.log('user error:', error)
   }
 })
 

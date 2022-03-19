@@ -86,7 +86,7 @@ router.post('/register', async function(req, res, next) {
 
 
 /* SAUVEGARDE DE FICHIER SUR CLOUDINARY */
-router.post('/uploadAvatar', async function(req, res, next) {
+router.post('/upload-avatar', async function(req, res, next) {
 
   // dossier dans lequel on veut placer notre fichier avec un nom unique
   var picturePath = `./tmp/${uniqid()}.jpg`;

@@ -91,15 +91,17 @@ router.post('/upload-avatar', async function(req, res, next) {
   // dossier dans lequel on veut placer notre fichier avec un nom unique
   var picturePath = `./tmp/${uniqid()}.jpg`;
 
-  // envoie du fichier 'avatar' dans le cloud
-  var resultCloudinary = await cloudinary.uploader.upload(picturePath);
+  // enregistrement/déplacement du fichier 'avatar' dans notre dossier temporaire (mv=déplacer)
+  var resultCopy = await req.files.avatar.mv(picturePath);
 
-  //suppression du backend de l'image temporaire
+    if (!resultCopy) {
+      var resultCloudinary = await cloudinary.uploader.upload(picturePath);
+      res.json({cloud: resultCloudinary});
+    } else {
+      res.json({error: resultCopy})
+    }
+  
   fs.unlinkSync(picturePath);
-
-  // dès que le fichier sera uploadé, renvoie des informations (url)
-  res.json({resultCloudinary})
-
 });
 
 

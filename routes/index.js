@@ -88,21 +88,18 @@ router.post('/register', async function(req, res, next) {
 /* SAUVEGARDE DE FICHIER SUR CLOUDINARY */
 router.post('/uploadAvatar', async function(req, res, next) {
 
-  // dossier dans lequel on veut placer notre fichier
+  // dossier dans lequel on veut placer notre fichier avec un nom unique
   var picturePath = `./tmp/${uniqid()}.jpg`;
 
-  // enregistrement/déplacement du fichier 'avatar' dans notre dossier temporaire 
-  var resultCopy = await req.files.avatar.mv(picturePath);
+  // envoie du fichier 'avatar' dans le cloud
+  var resultCloudinary = await cloudinary.uploader.upload(picturePath);
 
-    if (!resultCopy) {
-      var resultCloudinary = await cloudinary.uploader.upload(picturePath);
-      console.log(resultCloudinary)
-      res.json({cloud: resultCloudinary, message: 'Fichier téléchargé!'});
-    } else {
-      res.json({error: resultCopy, message: 'Erreur de téléchargement!'})
-    }
-  
+  //suppression du backend de l'image temporaire
   fs.unlinkSync(picturePath);
+
+  // dès que le fichier sera uploadé, renvoie des informations (url)
+  res.json({resultCloudinary})
+
 });
 
 

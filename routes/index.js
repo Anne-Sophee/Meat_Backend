@@ -46,7 +46,7 @@ router.post('/login', async function(req, res, next) {
     res.json({ error, user })
     console.log('user error:', error)
   }
-})
+});
 
 
 /* PAGE DE CREATION DE COMPTE */

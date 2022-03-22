@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 
 //schema de la collection users
 var UserSchema = mongoose.Schema({
-    token : String,
     lastname : String,
     firstname : String,
     email : String,
@@ -11,7 +10,8 @@ var UserSchema = mongoose.Schema({
     userPhoneNumber : Number,
     dateOfBirth : Date,
     gender : String,
-    avatar : String
+    avatar : String,
+    token : String
 });
 
 //méthode model avec en premier argument le nom de la collection et en deuxième le schéma 

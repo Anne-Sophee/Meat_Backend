@@ -21,5 +21,3 @@ mongoose.connect('mongodb+srv://Anesofie:Sophie-971@cluster0.ur7oi.mongodb.net/N
 
 //alternative avec ternaire = question ?(alors) condition1(true) :(sinon) condition2(false)
 //function(err) {err ? console.log(err) : console.log('Bdd connectée')}
-
-module.exports = mongoose

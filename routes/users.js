@@ -105,7 +105,13 @@ router.post('/upload-avatar', async function(req, res, next) {
 });
 
 
+/* SAUVEGARDE DE FICHIER SUR CLOUDINARY */
+router.get('/search-user/:userToken', async function(req,res,next) {
 
+  let result = await UserModel.findOne({token : req.params.userToken});
+  console.log(result)
+  res.json({result: result});
+});
 
 
 

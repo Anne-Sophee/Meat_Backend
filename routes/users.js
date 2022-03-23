@@ -8,6 +8,7 @@ var uid2 = require('uid2');
 
 var fs = require('fs');
 var uniqid = require('uniqid');
+const { Hash } = require('crypto');
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
  cloud_name: 'dsnrvfoqx',
@@ -109,11 +110,31 @@ router.post('/upload-avatar', async function(req, res, next) {
 router.get('/search-user/:userToken', async function(req,res,next) {
 
   let result = await UserModel.findOne({token : req.params.userToken});
-  console.log(result)
+
   res.json({result: result});
 });
 
 
+/* MISE A JOUR DES DONNÉES UTILISATEUR */
+router.put('/update-account', async function(req,res,next){
+
+  const cost = 10
+  const hash = bcrypt.hashSync(req.body.password, cost);
+  let updatedUser = await UserModel.findOne({token: token})
+
+  if (existingUser) {
+    updatedUser.email = req.body.email,
+    updatedUser.password = hash,
+    updatedUser.firstname = req.body.firstname,
+    updatedUser.lastname = req.body.lastname,
+    updatedUser.userAddress = req.body.userAddress,
+    updatedUser.userPhoneNumber = req.body.userPhoneNumber
+  }
+  
+    let newUserData = await existingUser.save()
+  
+  res.json({newUserData});
+});
 
 
 

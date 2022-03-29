@@ -13,7 +13,7 @@ var eventSchema = mongoose.Schema({
   chat_messages: [chatRoomSchema],
   token : String,
   dateInsert: Date,
-  date: Date,
+  date: String,
   title: String,
   planner: String,    
   guests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],

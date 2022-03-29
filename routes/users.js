@@ -57,13 +57,13 @@ router.post('/register', async function(req, res, next) {
   const cost = 10; //nombre de tours de hashage à effectuer
   const hash = bcrypt.hashSync(req.body.password, cost); //génère le hash du mdp
 
-  var user = await UserModel.findOne({email: req.body.email});
+  var user = await userModel.findOne({email: req.body.email});
   if (user) {
     error = "Utilisateur existant!"
       } else if (!user) {
 
         //création d'un nouvel utilisateur
-        var newUser = new UserModel ({
+        var newUser = new userModel ({
           avatar: req.body.avatar,
           lastname: req.body.lastname,
           firstname: req.body.firstname,
@@ -109,7 +109,7 @@ router.post('/upload-avatar', async function(req, res, next) {
 /* SAUVEGARDE DE FICHIER SUR CLOUDINARY */
 router.get('/search-user/:userToken', async function(req,res,next) {
 
-  let result = await UserModel.findOne({token : req.params.userToken});
+  let result = await userModel.findOne({token : req.params.userToken});
 
   res.json({result: result});
 });
@@ -120,7 +120,7 @@ router.put('/update-account', async function(req,res,next){
 
   const cost = 10
   const hash = bcrypt.hashSync(req.body.password, cost);
-  let updatedUser = await UserModel.findOne({token: token})
+  let updatedUser = await userModel.findOne({token: token})
 
   if (existingUser) {
     updatedUser.email = req.body.email,

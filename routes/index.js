@@ -41,7 +41,18 @@ router.post('/add-table', async function (req, res, next) {
 });
 
 
+/* PAGE D'AFFICHAGE DES TABLES DISPONIBLES */
+router.get('/search-table', async function (req, res, next) {
 
+  // affichage uniquement des events futurs
+  var result = await eventModel.find({
+    date:
+      { $gte: new Date(Date.now()).toISOString() }
+  })
+    .sort({ date: 1 }).populate("guests").exec();
+
+  res.json({ result: result });
+  });
 
 
 

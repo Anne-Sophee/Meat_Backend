@@ -31,7 +31,7 @@ router.post('/login', async function(req, res, next) {
   console.log('erreur user:', error, 'erreur mdp:', errorPassword)
 
   //recherche du document correspondant à l'email reçu du frontend
-  var user = await UserModel.findOne({email});
+  var user = await userModel.findOne({email});
 
   if (user) {
   //comparaison des mdp crytés pour permettre le login

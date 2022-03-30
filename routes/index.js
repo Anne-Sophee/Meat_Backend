@@ -4,12 +4,6 @@ var eventModel = require('../models/events');
 var express = require('express');
 var router = express.Router();
 
-var bcrypt = require('bcrypt');
-var uid2 = require('uid2');
-
-var fs = require('fs');
-var uniqid = require('uniqid');
-const { Hash } = require('crypto');
 var cloudinary = require('cloudinary').v2;
 cloudinary.config({
  cloud_name: 'dsnrvfoqx',
@@ -55,8 +49,24 @@ router.get('/search-table', async function (req, res, next) {
   });
 
 
+/* REDIRECTION VERS LA PAGE D'EVENT SÉLECTIONNÉE */
+  router.get('/my-events/:token', async function (req, res, next) {
 
-
+    const user = await userModel.findOne({ token: req.params.token })
+  
+    var result = await eventModel.aggregate([
+      {
+        $match:
+        {
+          $or: [{ planner: req.params.token },
+          { guests: user._id }],
+        }
+      },  
+      { $sort: { date: 1 } }
+    ])
+  
+    res.json({ result })
+  })
 
 
 module.exports = router;

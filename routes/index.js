@@ -115,6 +115,40 @@ res.json({ result })
 
 
 
+/* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
+router.get('/join-table/:_tableId', async function (req, res, next) {
+
+  var result = await eventModel.findOne({ _id: req.params._tableId }).populate("guests").exec();
+  var planner = await userModel.findOne({token: result.planner});
+
+  res.json({ result: result, planner : planner});
+
+});
+
+
+
+/* JOINSCREEN - INFORMATIONS L'EVENT REJOINT */
+router.post('/enter-table', async function (req, res, next) {
+
+  var table = await eventModel.findById(req.body.id);
+  var user = await userModel.findOne({ token: req.body.token });
+
+  if (table.guests.includes(user.id)) {
+    res.json({table, result: false})
+
+  } else {
+    table.guests.push(user.id)
+    table = await table.save();
+    res.json({ table ,result : true, user});
+  }
+});
+
+
+
+
+
+
+
 
 
 /* REDIRECTION VERS LA PAGE D'EVENT SÉLECTIONNÉE */
@@ -139,15 +173,7 @@ router.get('/my-events/:token', async function (req, res, next) {
 
 
 
-/* REDIRECTION VERS LA PAGE D'EVENT SÉLECTIONNÉE */
-router.get('/join-table/:_tableId', async function (req, res, next) {
 
-    var result = await eventModel.findOne({ _id: req.params._tableId }).populate("guests").exec();
-    var planner = await userModel.findOne({token: result.planner});
-
-    res.json({ result: result, planner : planner});
-  
-  });
 
 
 

@@ -1,6 +1,15 @@
 var mongoose = require('mongoose');
 
 
+// schéma de la collection chat de groupe
+var chatRoomSchema = mongoose.Schema({
+  date : Date,
+  content: String,
+  author : String,
+  room: String
+});
+
+
 // schéma de la collection table
 var eventSchema = mongoose.Schema({
   chat_messages: [chatRoomSchema],
@@ -20,13 +29,6 @@ var eventSchema = mongoose.Schema({
   age : String,
 })
 
-// schéma de la collection chat de groupe
-var chatRoomSchema = mongoose.Schema({
-  date : Date,
-  content: String,
-  author : String,
-  room: String
-});
 
 
 //méthode model avec en premier argument le nom de la collection et en deuxième le schéma 

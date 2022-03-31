@@ -118,7 +118,7 @@ res.json({ result })
 /* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
 router.get('/join-table/:tableId', async function (req, res, next) {
 
-  var result = await eventModel.findOne({ _id: req.params.tableId }).populate("guests").exec();
+  var result = await eventModel.findOne({ _id: result._id }).populate("guests").exec();
   var planner = await userModel.findOne({token: result.planner});
 
   res.json({ result: result, planner : planner});

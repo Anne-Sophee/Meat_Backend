@@ -46,27 +46,41 @@ router.get('/search-table', async function (req, res, next) {
     .sort({ date: 1 }).populate("guests").exec();
 
   res.json({ result: result });
-  });
+});
 
 
 /* REDIRECTION VERS LA PAGE D'EVENT SÉLECTIONNÉE */
-  router.get('/my-events/:token', async function (req, res, next) {
+router.get('/my-events/:token', async function (req, res, next) {
 
-    const user = await userModel.findOne({ token: req.params.token })
-  
-    var result = await eventModel.aggregate([
-      {
-        $match:
-        {
-          $or: [{ planner: req.params.token },
-          { guests: user._id }],
-        }
-      },  
-      { $sort: { date: 1 } }
-    ])
-  
-    res.json({ result })
+  const user = await userModel.findOne({ token: req.params.token })
+
+  var result = await eventModel.aggregate([{
+    $match: {
+        $or: [{ planner: req.params.token },
+        { guests: user._id }],
+    }
+  },  
+  { $sort: { date: 1 } }
+  ])
+
+  res.json({ result })
   })
+
+
+
+/* REDIRECTION VERS LA PAGE D'EVENT SÉLECTIONNÉE */
+router.get('/join-table/:_tableId', async function (req, res, next) {
+
+    var result = await eventModel.findOne({ _id: req.params._tableId }).populate("guests").exec();
+    var planner = await userModel.findOne({token: result.planner});
+
+    res.json({ result: result, planner : planner});
+  
+  });
+
+
+
+
 
 
 module.exports = router;

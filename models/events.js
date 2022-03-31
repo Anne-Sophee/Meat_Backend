@@ -1,14 +1,6 @@
 var mongoose = require('mongoose');
 
 
-var chatRoomSchema = mongoose.Schema({
-  date : Date,
-  content: String,
-  author : String,
-  room: String
-});
-
-
 var eventSchema = mongoose.Schema({
   chat_messages: [chatRoomSchema],
   token : String,
@@ -26,6 +18,14 @@ var eventSchema = mongoose.Schema({
   capacity: Number,
   age : String,
 })
+
+
+var chatRoomSchema = mongoose.Schema({
+  date : Date,
+  content: String,
+  author : String,
+  room: String
+});
 
 
 module.exports = mongoose.model('events', eventSchema);

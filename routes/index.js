@@ -13,7 +13,7 @@ cloudinary.config({
 
 
 
-/* PAGE DE CRÉATION DE TABLE */
+/* CREATESCREEN - CRÉATION DE TABLE*/
 router.post('/add-table', async function (req, res, next) {
 
   var addTable = new eventModel({
@@ -35,7 +35,8 @@ router.post('/add-table', async function (req, res, next) {
 });
 
 
-/* PAGE D'AFFICHAGE DES TABLES DISPONIBLES */
+
+/* HOMESCREEN - AFFICHAGE DES TABLES DISPONIBLES*/
 router.get('/search-table', async function (req, res, next) {
 
   // affichage uniquement des events futurs
@@ -47,6 +48,73 @@ router.get('/search-table', async function (req, res, next) {
 
   res.json({ result: result });
 });
+
+
+
+/* HOMESCREEN - FILTRAGE DES TABLES DISPONIBLES*/
+router.post('/filters', async function (req, res, next) {
+
+  if (req.body.date != 0 && req.body.type != "") {
+
+    let startDate = new Date(req.body.date); // ISODate("2014-10-03T04:00:00.188Z")
+    startDate.setUTCSeconds(0);
+    startDate.setUTCHours(0);
+    startDate.setUTCMinutes(0);
+
+    let endDate = new Date(req.body.date);
+    endDate.setUTCHours(23);
+    endDate.setUTCMinutes(59);
+    endDate.setUTCSeconds(59);
+
+    let filteredData = await eventModel.aggregate([{
+      $match: {
+        $and: [{
+          date: { $gte: startDate, $lte: endDate },
+          foodType: req.body.type
+        }]
+      }
+    },
+    { $sort: { date: 1 } }
+    ])
+
+    var result = filteredData
+    console.log("Date+Type:", result, req.body.type)
+
+  } else if (req.body.type != "") {
+
+    const typeFromFront = req.body.type.split(","); // req.body.type = string => tableau
+
+    let typeFilter = await eventModel.find({
+      foodType: { $in: typeFromFront },
+      date: { $gte: new Date(Date.now()).toISOString() }
+    })
+
+    var result = typeFilter
+    console.log("Type:", result)
+
+  } else if (req.body.date != 0) {
+
+    let startDate = new Date(req.body.date); // ISODate("2014-10-03T04:00:00.188Z")
+    startDate.setUTCSeconds(0);
+    startDate.setUTCHours(0);
+    startDate.setUTCMinutes(0);
+
+    let endDate = new Date(req.body.date);
+    endDate.setUTCHours(23);
+    endDate.setUTCMinutes(59);
+    endDate.setUTCSeconds(59);
+
+    let dateFilter = await eventModel.find({ date: { $gte: startDate, $lte: endDate } })
+    var result = dateFilter
+    console.log("Date:", result)
+  }
+  
+
+res.json({ result })
+})
+
+
+
 
 
 /* REDIRECTION VERS LA PAGE D'EVENT SÉLECTIONNÉE */
@@ -65,6 +133,9 @@ router.get('/my-events/:token', async function (req, res, next) {
 
   res.json({ result })
   })
+
+
+
 
 
 

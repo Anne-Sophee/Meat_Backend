@@ -12,7 +12,6 @@ var chatRoomSchema = mongoose.Schema({
 
 // schéma de la collection table
 var eventSchema = mongoose.Schema({
-  dateInsert: Date,
   date: Date,
   title: String,
   planner: String,    
@@ -25,7 +24,7 @@ var eventSchema = mongoose.Schema({
   capacity: Number,
   age : String,
   chat_messages: [chatRoomSchema],
-  guests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
+  guests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }]
 })
 
 

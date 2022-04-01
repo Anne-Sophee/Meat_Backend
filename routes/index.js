@@ -1,6 +1,5 @@
 var userModel = require('../models/users');
 var eventModel = require('../models/events');
-ObjectID = require('mongodb').ObjectID;
 
 var express = require('express');
 var router = express.Router();
@@ -110,8 +109,7 @@ router.post('/filters', async function (req, res, next) {
     console.log("Date:", result)
   }
   
-
-res.json({ result })
+  res.json({ result })
 })
 
 
@@ -119,14 +117,14 @@ res.json({ result })
 /* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
 router.get('/join-table/:tableId', async function (req, res, next) {
 
-  var result = await eventModel.findOne({ _id: req.params.tableId }).populate("guests").exec();
-  console.log('result', result)
   console.log('id', req.params)
+  var result = await eventModel.findById(req.params.tableId).populate("guests").exec();
+  console.log('result', result)
+  
   var planner = await userModel.findOne({token: result.planner});
   console.log('planner', planner)
 
   res.json({ result: result, planner : planner});
-
 });
 
 
@@ -149,13 +147,7 @@ router.post('/enter-table', async function (req, res, next) {
 
 
 
-
-
-
-
-
-
-/* REDIRECTION VERS LA PAGE D'EVENT SÉLECTIONNÉE */
+/* EVENTSCREEN - AFFICHAGES DES EVENTS DU USER */
 router.get('/my-events/:token', async function (req, res, next) {
 
   const user = await userModel.findOne({ token: req.params.token })
@@ -170,12 +162,36 @@ router.get('/my-events/:token', async function (req, res, next) {
   ])
 
   res.json({ result })
-  })
+})
 
 
 
+/* TABLESCREEN - QUITTER UNE TABLE */
+router.delete('/delete-guest/:tableId/:token', async function (req, res, next) {
 
-
+  var table = await eventModel.findById(req.params.tableId);
+  var user = await userModel.findOne({ token: req.params.token });
+  
+  if (table.guests.includes(user.id)) {
+  
+    table.guests = table.guests.filter(e => e != user.id);
+    table = await table.save();
+  
+  } else if (table.planner === req.params.token && table.guests.length > 0) {
+  
+    var guestData = await userModel.findOne({_id : table.guests[0]})
+    table.planner = guestData.token;
+    table.guests = table.guests.filter(e => e._id == guestData._id);
+    table = await table.save();
+  
+  } else if (table.planner === req.params.token && table.guests.length == 0){
+  
+    await table.delete()
+  
+  }
+  
+  res.json({ table });
+});
 
 
 

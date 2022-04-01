@@ -12,6 +12,17 @@ cloudinary.config({
 });
 
 
+
+/* BUDDYSCREEN - AFFICHE LA LISTE DES BUDDIES ET LA RELATION*/
+router.get('/list-related-users/:token',async function (req,res,next){
+  
+  let tokenHandlers = await userModel.find({buddies : { $all: [ { "$elemMatch" : {token: req.params.token}}]}})
+  let currentUser = await userModel.findOne({token: req.params.token});
+
+  res.json({listOfRelations: tokenHandlers, currentUser: currentUser})
+})
+
+
 /* BUDDYSCREEN - ACCEPTER UN BUDDY*/
 router.post('/accept-buddy', async function(req,res, next){
 

@@ -118,7 +118,7 @@ router.post('/filters', async function (req, res, next) {
 router.get('/join-table/:tableId', async function (req, res, next) {
 
   console.log('id', req.params)
-  var result = await eventModel.findById(req.params.tableId).populate("guests").exec();
+  var result = await eventModel.findById(req.params._id).populate("guests").exec();
   console.log('result', result)
   
   var planner = await userModel.findOne({token: result.planner});

@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+const dotenv = require("dotenv");
+dotenv.config();
 
 //options de connexion Mongoose avec limite de temps de tentative de connexion
 var options = {

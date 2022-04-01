@@ -1,5 +1,6 @@
 var userModel = require('../models/users');
 var eventModel = require('../models/events');
+ObjectID = require('mongodb').ObjectID;
 
 var express = require('express');
 var router = express.Router();
@@ -118,7 +119,7 @@ res.json({ result })
 /* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
 router.get('/join-table/:tableId', async function (req, res, next) {
 
-  var result = await eventModel.findOne({ _id: ObjectId(req.params.tableId) }).populate("guests").exec();
+  var result = await eventModel.findOne({ _id: req.params.tableId }).populate("guests").exec();
   console.log('result', result)
   console.log('id', req.params)
   var planner = await userModel.findOne({token: result.planner});

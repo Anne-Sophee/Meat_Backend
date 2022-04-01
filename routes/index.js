@@ -38,7 +38,8 @@ router.post('/add-table', async function (req, res, next) {
 
 /* HOMESCREEN - AFFICHAGE DES TABLES DISPONIBLES*/
 router.get('/search-table', async function (req, res, next) {
-
+  try {
+    
   // affichage uniquement des events futurs
   var result = await eventModel.find({
     date:
@@ -47,6 +48,9 @@ router.get('/search-table', async function (req, res, next) {
     .sort({ date: 1 }).populate("guests").exec();
 
   res.json({ result: result });
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 

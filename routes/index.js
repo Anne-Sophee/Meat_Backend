@@ -117,12 +117,12 @@ router.post('/filters', async function (req, res, next) {
 /* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
 router.get('/join-table/:tableId', async function (req, res, next) {
 
-  console.log('id', req.params)
-  var result = await eventModel.findById(req.params.id).populate("guests").exec();
-  console.log('result', result)
+  console.log('test id', req.params)
+  var result = await eventModel.findOne({_id: req.params.tableId}).populate("guests").exec();
+  console.log('test result', result)
   
   var planner = await userModel.findOne({token: result.planner});
-  console.log('planner', planner)
+  console.log('test planner', planner)
 
   res.json({ result: result, planner : planner});
 });

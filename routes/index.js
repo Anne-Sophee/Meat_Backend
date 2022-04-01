@@ -119,7 +119,10 @@ res.json({ result })
 router.get('/join-table/:tableId', async function (req, res, next) {
 
   var result = await eventModel.findOne({ _id: req.params.tableId }).populate("guests").exec();
+  console.log('result', result)
+  console.log('id', req.params)
   var planner = await userModel.findOne({token: result.planner});
+  console.log('planner', planner)
 
   res.json({ result: result, planner : planner});
 

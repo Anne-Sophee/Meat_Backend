@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-const { Schema } = mongoose;
 
 
 // schéma de la collection chat de groupe

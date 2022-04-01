@@ -12,6 +12,7 @@ var chatRoomSchema = mongoose.Schema({
 
 // schéma de la collection table
 var eventSchema = mongoose.Schema({
+  _id: Schema.Types.ObjectId,
   date: Date,
   title: String,
   planner: String,    

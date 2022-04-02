@@ -117,10 +117,8 @@ router.post('/filters', async function (req, res, next) {
 /* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
 router.get('/join-table/:tableId/:token', async function (req, res, next) {
 
-  var ObjectId = require('mongoose').Types.ObjectId;
-
   console.log('test id', req.params)
-  var result = await eventModel.findOne({_id: '6245cc32a3325d9f25867de7'}).populate("guests").exec();
+  var result = await eventModel.findOne({_id: req.params.tableId}).populate("guests").exec();
   console.log('test result', result)
   
   var planner = await userModel.findOne({token: req.params.token});

@@ -32,7 +32,7 @@ router.post('/add-table', async function (req, res, next) {
   var newTable = await addTable.save();
   
   res.json({ result: newTable ? true : false, newTable });
-}); 
+});
 
 
 

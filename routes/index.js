@@ -117,7 +117,7 @@ router.post('/filters', async function (req, res, next) {
 /* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
 router.get('/join-table/:tableId/:token', async function (req, res, next) {
 
-  console.log('test id', req.params)
+  console.log('test id', req.params) 
   var result = await eventModel.findById(req.params.tableId).populate("guests").exec();
   console.log('test result', result)
   

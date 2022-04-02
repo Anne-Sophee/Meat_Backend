@@ -117,12 +117,8 @@ router.post('/filters', async function (req, res, next) {
 /* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
 router.get('/join-table/:tableId/:token', async function (req, res, next) {
 
-  console.log('test id', req.params)
   var result = await eventModel.findById(req.params.tableId).populate("guests").exec();
-  console.log('test result', result)
-  
   var planner = await userModel.findOne({token: req.params.token});
-  console.log('test planner', planner)
 
   res.json({ result: result, planner : planner});
 }); 
@@ -141,7 +137,7 @@ router.post('/enter-table', async function (req, res, next) {
   } else {
     table.guests.push(user.id)
     table = await table.save();
-    res.json({ table ,result : true, user});
+    res.json({ table, result : true, user});
   }
 });
 
@@ -162,24 +158,25 @@ router.get('/my-events/:token', async function (req, res, next) {
   ])
 
   res.json({ result })
-})
+});
 
 
 
 /* TABLESCREEN - QUITTER UNE TABLE */
 router.delete('/delete-guest/:tableId/:token', async function (req, res, next) {
 
-  console.log('delete test id', req.params)
   var table = await eventModel.findById(req.params.tableId);
-  console.log('test table', table)
   var user = await userModel.findOne({ token: req.params.token });
-  console.log('test user', user)
   
+  //si le user id fait parti de la liste des id des guests
+  //alors libérer une place de participants sur la table
   if (table.guests.includes(user.id)) {
   
     table.guests = table.guests.filter(e => e != user.id);
     table = await table.save();
   
+  //si le token planner est strictement égal au token user et que la table à au moins deux guests
+  //alors trouver le premier participant et le passer en planner
   } else if (table.planner === req.params.token && table.guests.length > 0){
   
     var guestData = await userModel.findOne({_id : table.guests[0]})
@@ -187,6 +184,8 @@ router.delete('/delete-guest/:tableId/:token', async function (req, res, next) {
     table.guests = table.guests.filter(e => e._id == guestData._id);
     table = await table.save();
   
+  //si le token planner est strictement égal au token user et que la table à un seul guest
+  //alors suppression de la table
   } else if (table.planner === req.params.token && table.guests.length == 0){
   
     await table.delete()

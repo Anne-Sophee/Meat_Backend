@@ -1,6 +1,5 @@
 var userModel = require('../models/users');
 var eventModel = require('../models/events');
-var mongoose = require('mongoose');
 
 var express = require('express');
 var router = express.Router();
@@ -118,6 +117,8 @@ router.post('/filters', async function (req, res, next) {
 /* JOINSCREEN/TABLESCREEN - INFORMATIONS DE L'EVENT SÉLECTIONNÉ */
 router.get('/join-table/:tableId/:token', async function (req, res, next) {
 
+  var ObjectId = require('mongoose').Types.ObjectId;
+
   console.log('test id', req.params)
   var result = await eventModel.findOne({_id: new ObjectId(req.params.tableId).valueOf()}).populate("guests").exec();
   console.log('test result', result)
@@ -170,8 +171,11 @@ router.get('/my-events/:token', async function (req, res, next) {
 /* TABLESCREEN - QUITTER UNE TABLE */
 router.delete('/delete-guest/:tableId/:token', async function (req, res, next) {
 
+  console.log('delete test id', req.params)
   var table = await eventModel.findById(req.params.tableId);
+  console.log('test table', table)
   var user = await userModel.findOne({ token: req.params.token });
+  console.log('test user', user)
   
   if (table.guests.includes(user.id)) {
   

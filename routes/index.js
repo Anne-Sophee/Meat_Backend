@@ -1,6 +1,6 @@
 var userModel = require('../models/users');
 var eventModel = require('../models/events');
-var ObjectId = require('mongodb').ObjectId;
+const { ObjectId } = require('mongodb');
 
 var express = require('express');
 var router = express.Router();
@@ -119,7 +119,7 @@ router.post('/filters', async function (req, res, next) {
 router.get('/join-table/:tableId/:token', async function (req, res, next) {
 
   console.log('test id', req.params) 
-  var result = await eventModel.findOne({_id: new ObjectId(req.params.tableId)}).populate("guests").exec();
+  var result = await eventModel.findById({_id: new ObjectId(req.params.tableId)}).populate("guests").exec();
   console.log('test result', result)
   
   var planner = await userModel.findOne({token: req.params.token});

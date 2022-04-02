@@ -13,6 +13,32 @@ cloudinary.config({
 
 
 
+/* TABLESCREEN - SAUVEGARDE DES MESSAGES DU CHAT */
+router.post('/update-table-messages', async function(req,res, next){
+
+  let userTable = await eventModel.findById( req.body.eventId)
+  userTable.chat_messages.push({content: req.body.content, date : req.body.date, author: req.body.author,room:req.body.eventId})
+  let savedTable = await userTable.save()
+
+res.json({ result: true, conversation: savedTable });
+});
+
+
+
+/* TABLESCREEN - ENVOI DES MESSAGES DU CHAT */
+router.get('/list-table-messages/:tableId/:token', async function(req, res, next){
+
+  let userTable = await eventModel.findById( req.params.tableId).populate("guests").exec();
+  let userIndex = userTable.guests.map((el) => el.token).indexOf(req.params.token)
+  let author = userTable.guests[userIndex].firstname
+
+res.json({chatMessages: userTable.chat_messages, author: author})
+});
+
+
+
+
+
 /* BUDDYSCREEN - AFFICHE LA LISTE DES BUDDIES ET LA RELATION*/
 router.get('/list-related-users/:token',async function (req,res,next){
   

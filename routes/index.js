@@ -182,7 +182,7 @@ router.delete('/delete-guest/:tableId/:token', async function (req, res, next) {
     table.guests = table.guests.filter(e => e != user.id);
     table = await table.save();
   
-  } else if (table.planner === req.params.token && table.guests.length > 0) {
+  } else if (table.planner === req.params.token && table.guests.length > 0){
   
     var guestData = await userModel.findOne({_id : table.guests[0]})
     table.planner = guestData.token;

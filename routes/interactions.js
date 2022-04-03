@@ -29,15 +29,13 @@ res.json({ result: true, conversation: savedTable });
 /* TABLESCREEN - ENVOI DES MESSAGES DU CHAT */
 router.get('/list-table-messages/:tableId/:token', async function(req, res, next){
 
-  console.log('req.params:', req.params)
-  let userTable = await eventModel.findById( req.params.tableId).populate("guests").exec();
-  console.log('userTable:', userTable)
-  let userIndex = userTable.guests.map((el) => el.token).indexOf(req.params.token)
+  let selectTable = await eventModel.findById( req.params.tableId).populate("guests").exec();
+  let userIndex = selectTable.guests.map((el) => el.token).indexOf(req.params.token)
   console.log('userIndex:', userIndex)
   let author = userTable.guests[userIndex].firstname
   console.log('author:', author)
 
-res.json({chatMessages: userTable.chat_messages, author: author})
+res.json({chatMessages: selectTable.chat_messages, author: author})
 });
 
 

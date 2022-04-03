@@ -32,7 +32,7 @@ router.get('/list-table-messages/:tableId/:token', async function(req, res, next
   let selectTable = await eventModel.findById( req.params.tableId).populate("guests").exec();
   let userIndex = selectTable.guests.map((el) => el.token).indexOf(req.params.token)
   console.log('userIndex:', userIndex)
-  let author = userTable.guests[userIndex].firstname
+  let author = selectTable.guests[userIndex].firstname
   console.log('author:', author)
 
 res.json({chatMessages: selectTable.chat_messages, author: author})

@@ -1,5 +1,6 @@
 var userModel = require('../models/users');
 var eventModel = require('../models/events');
+var conversationModel = require('../models/conversations');
 
 var express = require('express');
 var router = express.Router();
@@ -16,8 +17,8 @@ cloudinary.config({
 /* TABLESCREEN - SAUVEGARDE DES MESSAGES DU CHAT */
 router.post('/update-table-messages', async function(req,res, next){
 
-  let userTable = await eventModel.findById( req.body.eventId)
-  userTable.chat_messages.push({content: req.body.content, date : req.body.date, author: req.body.author,room:req.body.eventId})
+  let userTable = await eventModel.findById(req.body.eventId)
+  userTable.chat_messages.push({content: req.body.content, date: req.body.date, author: req.body.author, room: req.body.eventId})
   let savedTable = await userTable.save()
 
 res.json({ result: true, conversation: savedTable });

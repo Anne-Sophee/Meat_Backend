@@ -27,7 +27,7 @@ router.post('/add-table', async function (req, res, next) {
     capacity: req.body.capacity,
     budget: req.body.budget,
     planner: req.body.planner
-  });
+  }); 
 
   var newTable = await addTable.save();
   

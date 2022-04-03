@@ -64,7 +64,7 @@ router.post('/accept-buddy', async function(req,res, next){
   let currentUserSaved = await currentUser.save();
 
   res.json({ result: true, requester : currentUserSaved, receiver :receiverUser });
-});
+}); 
 
 
 

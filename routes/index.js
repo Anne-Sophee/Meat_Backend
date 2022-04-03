@@ -165,9 +165,12 @@ router.get('/my-events/:token', async function (req, res, next) {
 /* TABLESCREEN - QUITTER UNE TABLE */
 router.delete('/delete-guest/:tableId/:token', async function (req, res, next) {
 
+  console.log('req.params:', req.params)
   var table = await eventModel.findById(req.params.tableId);
+  console.log('table:', table)
   var user = await userModel.findOne({ token: req.params.token });
-  
+  console.log('user:', user)
+
   //si le user id fait parti de la liste des id des guests
   //alors libérer une place de participants sur la table
   if (table.guests.includes(user.id)) {

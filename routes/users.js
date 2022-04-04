@@ -18,7 +18,7 @@ cloudinary.config({
 
 
 
-/* PAGE DE CONNEXION */
+/* LOGINSCREEN - PAGE DE CONNEXION */
 router.post('/login', async function(req, res, next) {
 
   var email = req.body.email
@@ -50,7 +50,7 @@ router.post('/login', async function(req, res, next) {
 });
 
 
-/* PAGE DE CREATION DE COMPTE */
+/* REGISTERSCREEN - PAGE DE CREATION DE COMPTE */
 router.post('/register', async function(req, res, next) {
 
   var error = "Nouvel utilisateur!"
@@ -86,7 +86,7 @@ router.post('/register', async function(req, res, next) {
 });
 
 
-/* SAUVEGARDE DE FICHIER SUR CLOUDINARY */
+/* REGISTERSCREEN - SAUVEGARDE DE FICHIER SUR CLOUDINARY */
 router.post('/upload-avatar', async function(req, res, next) {
 
   // dossier dans lequel on veut placer notre fichier avec un nom unique
@@ -106,7 +106,7 @@ router.post('/upload-avatar', async function(req, res, next) {
 });
 
 
-/* SAUVEGARDE DE FICHIER SUR CLOUDINARY */
+/* ACCOUNTSCREEN - SAUVEGARDE DE FICHIER SUR CLOUDINARY */
 router.get('/search-user/:userToken', async function(req,res,next) {
 
   let result = await userModel.findOne({token : req.params.userToken});
@@ -115,7 +115,7 @@ router.get('/search-user/:userToken', async function(req,res,next) {
 });
 
 
-/* MISE A JOUR DES DONNÉES UTILISATEUR */
+/* ACCOUNTSCREEN - MISE A JOUR DES DONNÉES UTILISATEUR */
 router.put('/update-account', async function(req,res,next){
 
   const cost = 10

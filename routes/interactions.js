@@ -14,6 +14,19 @@ cloudinary.config({
 
 
 
+/* TABLESCREEN - ENVOI DES MESSAGES/AUTEUR DU CHAT */
+router.get('/list-table-messages/:tableId/:token', async function(req, res, next){
+
+  let selectTable = await eventModel.findById(req.params.tableId).populate("guests").exec();
+  let userData = await userModel.findOne({token: req.params.token});
+  let author = userData.firstname
+
+res.json({chatMessages: selectTable.chat_messages, author: author})
+});
+
+
+
+
 /* TABLESCREEN - SAUVEGARDE DES MESSAGES DU CHAT */
 router.post('/update-table-messages', async function(req,res, next){
 
@@ -23,28 +36,6 @@ router.post('/update-table-messages', async function(req,res, next){
 
 res.json({ result: true, conversation: savedTable });
 });
-
-
-
-/* TABLESCREEN - ENVOI DES MESSAGES DU CHAT */
-router.get('/list-table-messages/:tableId/:token', async function(req, res, next){
-
-  let selectTable = await eventModel.findById(req.params.tableId).populate("guests").exec();
-  let userData = await userModel.findOne({token: req.params.token});
-  let author = userData.firstname
-
-  // let userIndex = selectTable.guests.map((el) => el.token).indexOf(req.params.token);
-
-  // if (selectTable.planner === userData) {
-
-  // }
-  // console.log('userIndex:', userIndex)
-  // let author = selectTable.guests[userIndex].firstname
-  console.log('author:', author)
-
-res.json({chatMessages: selectTable.chat_messages, author: author})
-});
-
 
 
 
@@ -59,12 +50,43 @@ router.get('/list-related-users/:token',async function (req,res,next){
 })
 
 
+
+
+/* BUDDYSCREEN - AJOUTER UN BUDDY*/
+router.post('/add-buddy', async function(req,res, next){
+
+  let currentUser = await userModel.findOne({token : req.body.userToken});
+  let receiverUser = await userModel.findOne({token : req.body.token});
+
+  //vérification si le token est déjà présent dans la liste de buddies.
+  if(currentUser.buddies.some(
+    (buddy) => buddy.token === req.body.token) && receiverUser.buddies.some(
+      (buddy) => buddy.token === req.body.userToken )){
+    res.json({result: false})
+
+  } else if (currentUser.token  === receiverUser.token ){
+    res.json({result: false})
+
+  } else {
+    currentUser.buddies = [...currentUser.buddies, {token : req.body.token, status: true}];
+    receiverUser.buddies = [...receiverUser.buddies, {token : req.body.userToken, status: false}];
+    let currentUserSaved = await currentUser.save();
+    let receiverUserSaved = await receiverUser.save();
+
+    res.json({ result: true, requester : currentUserSaved, receiver :receiverUserSaved });
+  }
+});
+
+
+
+
 /* BUDDYSCREEN - ACCEPTER UN BUDDY*/
 router.post('/accept-buddy', async function(req,res, next){
 
   let currentUser = await userModel.findOne({token : req.body.userToken});
   let receiverUser = await userModel.findOne({token : req.body.token});
   let receiverIndex = currentUser.buddies.map((el) => el.token).indexOf(req.body.token)
+
   currentUser.buddies[receiverIndex].status = true;
   let currentUserSaved = await currentUser.save();
 
@@ -75,13 +97,15 @@ router.post('/accept-buddy', async function(req,res, next){
 
 /* BUDDYSCREEN - REFUSER UN BUDDY*/
 router.post('/decline-buddy', async function(req,res, next){
-  
+
   // récupère le user demandé et le user demandeur
   let currentUser = await userModel.findOne({token : req.body.userToken});
   let receiverUser = await userModel.findOne({token : req.body.token});
 
   //vérification si le token est déjà présent dans la liste de buddies.
-  if (currentUser.buddies.some((buddy) => buddy.token !== req.body.token ) && receiverUser.buddies.some((buddy) => buddy.token !== req.body.userToken)) {
+  if (currentUser.buddies.some(
+    (buddy) => buddy.token !== req.body.token ) && receiverUser.buddies.some(
+      (buddy) => buddy.token !== req.body.userToken)) {
     res.json({result: false})
 
   } else {
@@ -93,12 +117,33 @@ router.post('/decline-buddy', async function(req,res, next){
 
     res.json({ result: true, requester : currentUserSaved, receiver :receiverUserSaved });
   }
-
 });
 
 
 
 
+/* MESSAGESCREEN - ENVOYER LES MESSAGES SAUVEGARDÉS*/
+router.get("/list-chat-messages/:conversation/:token",async function(req,res,next){
+  
+  let userConversation = await conversationModel.findById( req.params.conversation).populate("talkers").exec();
+  let userIndex = userConversation.talkers.map((el) => el.token).indexOf(req.params.token)
+  let author = userConversation.talkers[userIndex].firstname;
+
+  res.json({chatMessages : userConversation.chat, author : author})
+})
+
+
+
+
+/* MESSAGESCREEN - ENREGISTRER LA CONVERSATION*/
+router.post('/update-messages', async function(req,res, next){
+  
+  let userConversation = await conversationModel.findById( req.body.conversation)
+  userConversation.chat.push({content: req.body.content, date : req.body.date, author: req.body.author,conversation:req.body.conversation})
+  let savedConversation = await userConversation.save()
+
+  res.json({ result: true, conversation : savedConversation });
+});
 
 
 
